@@ -63,4 +63,14 @@ const getVideo = async(id, res) => {
     const data = await response.json();
     const thumbnail = data.video.Resolutions["thumbnail"];
     const url = data.video.Resolutions[res];
+
+    const videoEl = document.getElementById("video_player");
+    videoEl.src = url;
+    videoEl.poster = thumbnail;
+    videoEl.load();
+
+    const play = document.getElementById("video_play_button");
+    play.addEventListener("click", () => {
+        videoEl.play();
+    });
 }

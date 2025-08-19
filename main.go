@@ -22,5 +22,7 @@ func main() {
 	r.POST("/upload/chunk", handlers.UploadChunkHandler)
 	r.POST("/upload/complete", handlers.UploadCompleteHandler)
 
+	r.GET("/video/:video_id", handlers.RetrieveVideo)
+
 	r.Run(":8080")
 }

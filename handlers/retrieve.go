@@ -1,9 +1,10 @@
 package handlers
 
 import (
-    "net/http"
-    "go-video-system/service"
-    "github.com/gin-gonic/gin"
+	"go-video-system/service"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func RetrieveVideo(c *gin.Context) {
@@ -13,5 +14,6 @@ func RetrieveVideo(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "video not found"})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{"video": video})
 }

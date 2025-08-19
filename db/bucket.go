@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/minio/minio-go/v7"
@@ -75,4 +76,19 @@ func S3Merge(uploadID string, totalChunks int) (string, error) {
 	}
 
 	return localPath, nil
+}
+
+func S3PresignedURL(key string, expiry time.Duration) (string, error) {
+	reqParams := make(map[string][]string)
+	presignedURL, err := S3Client.PresignedGetObject(
+		Ctx,
+		bucketName,
+		key,
+		expiry,
+		reqParams,
+	)
+	if err != nil {
+		return "", err
+	}
+	return presignedURL.String(), nil
 }

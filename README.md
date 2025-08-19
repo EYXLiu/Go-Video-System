@@ -19,7 +19,7 @@ Designed for scalable video handling - following chunking method <br/>
 **GET** `/video/:video_id` get metadata for videos -> can access video and thumbnail through the resolutions links <br/>
 
 # Frontend
-Follow the below for a sample <video> div <br/>
+Follow the below for a sample \<video\> div <br/>
 ```
 <video id="video_player" width="640" height="360" poster="" controls preload="none">
   Your browser does not support the video tag.

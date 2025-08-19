@@ -14,13 +14,14 @@ import (
 )
 
 var S3Client *minio.Client
-var bucketName = os.Getenv("S3_VIDEO_BUCKET")
+var bucketName string
 
 func S3Init() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	bucketName = os.Getenv("S3_VIDEO_BUCKET")
 
 	endpoint := os.Getenv("S3_ENDPOINT")
 	accessKey := os.Getenv("S3_ACCESS_KEY")

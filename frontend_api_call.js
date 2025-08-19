@@ -55,3 +55,12 @@ const uploadVideo = async (file) => {
     await uploadChunks(file, uploadID);
     await uploadComplete(uploadID);
 }
+
+const getVideo = async(id, res) => {
+    const response = await fetch(`${process.env.URL}/video/${id}`, {
+        method: "GET"
+    }) 
+    const data = await response.json();
+    const thumbnail = data.video.Resolutions["thumbnail"];
+    const url = data.video.Resolutions[res];
+}

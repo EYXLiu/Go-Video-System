@@ -33,7 +33,17 @@ func UploadChunk(uploadID string, chunkNum int, file *multipart.FileHeader) erro
 	}
 	defer f.Close()
 
-	return db.S3Upload(uploadID, chunkNum, f, file.Size)
+	err = db.S3Upload(uploadID, chunkNum, f, file.Size)
+	if err != nil {
+		return err
+	}
+
+	err = db.RedisIncrement(uploadID, chunkNum)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func UploadComplete(uploadID string) (model.Video, error) {

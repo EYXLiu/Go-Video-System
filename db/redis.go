@@ -35,12 +35,12 @@ func RedisSet(upload model.UploadSession) error {
 	return Rdb.Set(Ctx, upload.UploadID, data, 0).Err()
 }
 
-func RedisIncrement(uploadID string) error {
+func RedisIncrement(uploadID string, chunkNum int) error {
 	upload, err := RedisGet(uploadID)
 	if err != nil {
 		return err
 	}
-	upload.Chunks += 1
+	upload.Chunks = chunkNum
 	return RedisSet(upload)
 }
 

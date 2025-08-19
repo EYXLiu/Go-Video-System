@@ -7,7 +7,7 @@ Used Redis for chunked uploads for tracking upload sessions <br/>
 Metadata for files (location, resolutions, length) is saved in Postgres <br/>
 Uploaded files are saved to MinIO (S3-compatible endpoints, just switch endpoint from localhost to s3 host) <br/>
 FFmpeg is used for thumbnail and resolution generation 
-* Should switch to HLS for auto resolution switching in the future 
+- Should switch to HLS for auto resolution switching in the future 
 
 # Endpoints
 Follow the `frontend_api_call.js` file for upload video frontend call samples <br/>

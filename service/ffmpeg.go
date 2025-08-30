@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"go-video-system/db"
 	"go-video-system/model"
 	"os/exec"
 	"path/filepath"
@@ -60,7 +61,31 @@ func processVideo(filePath string, video *model.Video) error {
 	if err != nil {
 		return err
 	}
-	video.Resolutions = assets
+	resolutions := make(map[string]string)
+
+	if thumb, ok := assets["thumbnail"]; ok {
+		url, err := db.S3UploadFile(thumb, fmt.Sprintf("videos/%s/thumbnail.jpg", video.VideoID))
+		if err != nil {
+			return err
+		}
+		resolutions["thumbnail"] = url
+	}
+
+	for res, localFile := range assets {
+		if res == "thumbnail" {
+			continue
+		}
+
+		url, err := db.S3UploadFile(localFile, fmt.Sprintf("videos/%s/%sp.mp4", video.VideoID, res))
+		if err != nil {
+			fmt.Println("upload error:", err)
+			continue
+		}
+
+		resolutions[res] = url
+	}
+
+	video.Resolutions = resolutions
 
 	return nil
 }

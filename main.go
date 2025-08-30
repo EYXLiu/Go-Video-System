@@ -23,6 +23,7 @@ func main() {
 	r.POST("/upload/complete", handlers.UploadCompleteHandler)
 
 	r.GET("/video/:video_id", handlers.RetrieveVideo)
+	r.GET("/videos/:video_id/download", handlers.DownloadVideo)
 
 	r.Run(":8080")
 }

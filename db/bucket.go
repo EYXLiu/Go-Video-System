@@ -92,3 +92,39 @@ func S3PresignedURL(key string, expiry time.Duration) (string, error) {
 	}
 	return presignedURL.String(), nil
 }
+
+func S3UploadFile(localPath string, objectKey string) (string, error) {
+	file, err := os.Open(localPath)
+	if err != nil {
+        return "", err
+    }
+    defer file.Close()
+
+	fi, err := file.Stat()
+    if err != nil {
+        return "", err
+    }
+
+	_, err = S3Client.PutObject(
+		Ctx,
+		bucketName,
+		objectKey,
+		file,
+		fi.Size(),
+		minio.PutObjectOptions{ContentType: "video/mp4"},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	endpoint := os.Getenv("S3_ENDPOINT")
+	useSSL := os.Getenv("S3_USE_SSL") == "true"
+	scheme := "http"
+	if useSSL {
+		scheme = "https"
+	}
+
+	url := fmt.Sprintf("%s://%s/%s/%s", scheme, endpoint, bucketName, objectKey)
+	// url := fmt.Sprintf("https://%s.s3.amazonaws.com/%s", bucketName, objectKey) for AWS compatability
+	return url, nil
+}

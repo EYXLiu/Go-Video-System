@@ -17,6 +17,7 @@ Designed for scalable video handling - following chunking method <br/>
 **POST** `/upload/chunk` upload a single video chunk <br/>
 **POST** `/upload/complete` merge chunks, generate thumbnail and resolutions, upload metadata to Postgres <br/>
 **GET** `/video/:video_id` get metadata for videos -> can access video and thumbnail through the resolutions links <br/>
+**GET** `/video/:video_id/download?res=` download the video using Go io.Copy file streaming -> saves memory <br/>
 
 # Frontend
 Follow the below for a sample \<video\> div <br/>

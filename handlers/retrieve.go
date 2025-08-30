@@ -1,9 +1,10 @@
 package handlers
 
 import (
+	"fmt"
 	"go-video-system/service"
+	"io"
 	"net/http"
-	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,8 +35,21 @@ func DownloadVideo(c *gin.Context) {
 		return
 	}
 
+	resp, err := http.Get(filePath)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch video"})
+		return
+	}
+	defer resp.Body.Close()
+
 	c.Header("Content-Description", "File Transfer")
-	c.Header("Content-Disposition", "attachment; filename="+filepath.Base(filePath))
+	c.Header("Content-Disposition", "attachment; filename="+videoID+"_"+res+".mp4")
 	c.Header("Content-Type", "video/mp4")
-	c.File(filePath)
+	c.Header("Content-Length", fmt.Sprintf("%d", resp.ContentLength))
+
+	_, err = io.Copy(c.Writer, resp.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to stream video"})
+		return
+	}
 }
